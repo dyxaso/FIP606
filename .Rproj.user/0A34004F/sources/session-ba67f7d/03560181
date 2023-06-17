@@ -1,12 +1,12 @@
 {
-    "id": "C910949E",
+    "id": "03560181",
     "path": "C:/Users/LG/Desktop/FIP606/index.qmd",
     "project_path": "index.qmd",
     "type": "quarto_markdown",
-    "hash": "0",
+    "hash": "2639870287",
     "contents": "",
     "dirty": false,
-    "created": 1687040486166.0,
+    "created": 1687043256691.0,
     "source_on_save": false,
     "relative_order": 2,
     "properties": {
@@ -16,14 +16,16 @@
         "Source": "Source",
         "docOutlineVisible": "1",
         "rmdVisualCollapsedChunks": "",
-        "rmdVisualModeLocation": "2:0"
+        "rmdVisualModeLocation": "376:367",
+        "cursorPosition": "0,0",
+        "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1687038077,
+    "lastKnownWriteTime": 1687043887,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1687038077,
+    "last_content_update": 1687043887911,
     "read_only": false,
     "read_only_alternatives": []
 }
