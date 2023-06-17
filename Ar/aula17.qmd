@@ -1,0 +1,99 @@
+---
+title: "EC50"
+author: "Yuri"
+format: html
+---
+
+```{r}
+library(gsheet)
+library(tidyverse)
+library(remotes)
+
+dat <- gsheet2tbl("https://docs.google.com/spreadsheets/d/15pCj0zljvd-TGECe67OMt6sa21xO8BqUgv4d-kU8qi8/edit#gid=0")
+
+options(scipen=999)
+dat2 <- dat |> 
+  dplyr::select(-Isolate, Population) |> 
+  group_by(Code, Year, Dose) |> 
+  summarise(GC_mean = mean(GC))
+  
+
+FGT152 <- dat2 |> 
+  filter(Code == "FGT152")
+
+FGT152 |> 
+  ggplot(aes(factor(Dose), GC_mean))+
+  geom_point()+
+  geom_line()
+
+dat2 |> 
+   ggplot(aes(factor(Dose), GC_mean))+
+  geom_point()+
+  geom_line()+
+  facet_wrap(~Code)
+```
+
+PACOTE DRC PARA EC50:
+
+```{r}
+library(drc)
+drc1 <- drm(GC_mean ~ Dose, data = FGT152,
+    fct = LL.3())
+AIC(drc1)
+summary(drc1)
+plot(drc1)
+ED(drc1, 50, interval = "delta")
+```
+
+```{r}
+library(ec50estimator)
+
+df_ec50 <- estimate_EC50(GC_mean ~ Dose,
+                         data = dat2,
+                         isolate_col = "Code",
+                         interval = "delta",
+                         fct = drc::LL.3())
+
+
+## Função criada pelo Cha
+
+df_ED50 <- function(formula, isolate_col, fct = LL.3(), ed_perc = 50, interval = "delta", data) {
+  # get the unique values of the isolate column
+  isolates <- unique(data %>% pull(isolate_col))
+
+  # apply drm() and ED() to each isolate
+  quiet_map <- quietly(map_df)
+  results <- quiet_map(
+    isolates, 
+    ~{
+      # subset the data for the current isolate
+      isolate_data <- data %>% filter(!!sym(isolate_col) == .x)
+      
+      # apply drm()
+      drm_result <- drm(formula, data = isolate_data, fct = fct)
+      
+      # apply ED() and extract the EC50 value and its confidence interval
+      ed_result <- as.data.frame(ED(drm_result, ed_perc, interval = interval))
+      
+      # return as a data frame
+      tibble(
+        isolate = .x,
+        EC50 = ed_result["e:1:50", "Estimate"],
+        lower = ed_result["e:1:50", "Lower"],
+        upper = ed_result["e:1:50", "Upper"]
+      )
+    }
+  )$result
+
+  return(results)
+}
+
+results <- df_ED50(GC_mean ~ Dose, 
+                   isolate_col = "Code", 
+                   data = dat2)
+
+
+# print the results
+results
+
+```

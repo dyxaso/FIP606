@@ -1,0 +1,80 @@
+---
+title: "Gráficos em ggplot"
+author: "Yuri"
+format: html
+
+execute: 
+  freeze: auto
+  cache: true
+  warning: false
+---
+
+## Desing de gráficos em ggplot:
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+
+mg <- read.csv("dados-diversos.csv")
+
+mg |> 
+  ggplot(aes(Irrigation, severity, shape = Irrigation)) + geom_point(alpha = 0.5)
+
+mg |> 
+  ggplot(aes(day, severity, shape = Irrigation)) + geom_point(alpha = 0.5)+ geom_line()
+
+mg |> 
+  filter(rep==1) |> 
+  ggplot(aes(day, severity, shape = Irrigation)) + geom_point(alpha = 0.5)+ geom_line()
+
+
+mg |>
+# filter(rep ==1) |> 
+  ggplot(aes(day, severity, shape = Irrigation)) + geom_point(alpha = 0.5)+ geom_line() + facet_wrap(~rep)
+
+#ou
+
+mg |>
+# filter(rep ==3) |> 
+  ggplot(aes(day, severity, shape = Irrigation)) + geom_point(alpha = 0.5)+ geom_line() + facet_wrap(~rep)
+
+mg |> 
+  select(Irrigation, severity) |>  
+  ggplot(aes(Irrigation, severity)) + geom_boxplot()+
+  geom_point() + geom_point(alpha = 0.5)
+
+mg |> 
+  select(day, rep, severity) |>  
+  ggplot(aes(day, severity,)) + geom_point()
+
+mg |> 
+  select(day, rep, severity) |>  
+  group_by(day) |> 
+  summarize(sev = mean(severity)) |> 
+    ggplot(aes(day, sev,)) + geom_point()
+#fazendo a media 
+mg2 <- mg |> 
+  select(day, rep, severity) |>  
+  group_by(day) |> 
+  summarize(sev = mean(severity))
+
+mg2 |> 
+  ggplot(aes(day, sev*100))+
+  geom_line(color = "darkorange")+
+  geom_point(size = 3, 
+             color = "darkorange")+
+  scale_x_continuous(breaks = c(0,7,14,21,28,35,42,49,56,63))+
+  scale_y_continuous(n.breaks = 5, 
+                     limits = c(0,100))+
+    labs(x = "Time (days)", 
+         y = "Severity (%)", 
+         title = "My first ggplot", 
+         subtitle = "It is beatiful", 
+         caption = "Source: FIP 606")+
+#   Configurar o gráfico
+  theme_light()
+ggsave("myfirstggplot.png",
+       bg = "white",
+       width = 4,
+       height = 3)
+```

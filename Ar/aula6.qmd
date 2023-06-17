@@ -1,0 +1,105 @@
+---
+title: "Gráficos em ggplot part.3"
+author: "Yuri"
+format: html
+
+execute: 
+  freeze: auto
+  cache: true
+  warning: false
+---
+
+## Gráficos tipo Scatter plot
+
+Um gráfico que correlaciona duas variáveis:
+
+```{r}
+library(tidyverse)
+library(readxl)
+df <- read_xlsx("dados-diversos.xlsx")
+dfcida <- read_xlsx("dados-diversos.xlsx", sheet = "fungicida_campo")
+library(ggplot2)
+## trat = eixo x, sev= eixo y.
+dfcida |> 
+  ggplot(aes(trat, yld))+
+           geom_jitter(whidth = 0.1,
+                       color="gray60")+
+  stat_summary(fun = mean,
+               color = "red")
+
+dfcida |> 
+  ggplot(aes(trat, sev))+
+           geom_jitter(whidth = 0.1,
+                       color="gray60")+
+  stat_summary(fun.data = mean_se,
+               color = "red")
+```
+
+```{r}
+## para trazer uma escala de sobreposição utiliza-se o alpha
+dfcida |> 
+  ggplot(aes(sev, yld, 
+             color = trat,
+             size = yld))+
+  geom_point(alpha = 0.5)
+```
+
+```{r}
+dfcida |> 
+  ggplot(aes(sev, yld,
+             color ="gray50"))+
+  geom_point(alpha = 0.5,
+             size = 3)+
+  geom_smooth(method = "lm",
+              se = FALSE,
+              color ="black",
+              linetype = "solid",
+              size =1)
+```
+
+```{r}
+milho <- read_excel("dados-diversos.xlsx", "milho") 
+
+milho |>
+ggplot(aes(method,  yield, color = method))+
+  geom_jitter(width = 0.1)+
+  facet_wrap(~hybrid)
+```
+
+Histograma:
+
+```{r}
+library(patchwork)
+a <- milho |> 
+  ggplot(aes(x = index))+
+  geom_histogram(bins = 10, color = "black", fill= "green")
+b <-milho |> 
+  ggplot(aes(x = yield))+
+  geom_histogram(bins = 10, color = "black", fill= "green")
+(a | b) +
+plot_annotation(tag_levels = "A",
+                  title = "Graph Histo")
+ggsave("figs/histograma.png", bg = "white")
+```
+
+```{r}
+insect <- read_excel("dados-diversos.xlsx", "mortalidade")
+
+insect |>
+  pivot_longer(2:3,
+               names_to = "status",
+               values_to = "value") |> 
+  ggplot(aes(inseticida, value, fill = status))+
+  geom_col()
+```
+
+```{r}
+insect <- read_excel("dados-diversos.xlsx", "mortalidade")
+
+insect |>
+  pivot_longer(2:3,
+               names_to = "status",
+               values_to = "value") |> 
+  ggplot(aes(inseticida, value, fill = status))+
+  geom_col()
+```

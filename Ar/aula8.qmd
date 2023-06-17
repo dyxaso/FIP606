@@ -1,0 +1,62 @@
+---
+title: "Iniciando teste T"
+author: "Yuri"
+format: html
+
+execute: 
+  freeze: auto
+  cache: true
+  warning: false
+---
+
+## Importar dados
+
+```{r}
+library(tidyverse)
+library(readxl)
+mg <- read_excel("dados-diversos.xlsx")
+```
+
+```{r}
+mg |> 
+  ggplot(aes(trat, comp))+
+  geom_jitter(width =0.05)+
+  geom_boxplot(fill = NA, 
+               outlier.colour = NA)+
+  ylim(5, 20)+
+  annotate(geom = "text",
+           x = 0.7, y = 19,
+           label = "t = 8.12; P < 0.001;")
+```
+
+```{r}
+mg |> 
+  
+  ggplot(aes(trat, comp))+
+  stat_summary(fun.data = "mean_se")
+```
+
+```{r}
+mg2 <- mg |> 
+  pivot_wider(1, 
+              names_from = trat,
+              values_from = comp)
+```
+
+```{r}
+t <- t.test(mg2$Mg2, mg2$control)
+t
+library(report)
+report(t)
+```
+
+## Usando o pacote infer:
+
+```{r}
+library(infer)
+mg |> 
+  t_test(comp ~ trat,
+         order = c("control", "Mg2"))
+```
+
+https://www.datanovia.com/en/lessons/t-test-in-r/

@@ -1,0 +1,104 @@
+---
+title: " Tabela de contigência / Variáveis categoricas"
+author: "Yuri"
+format: html
+
+execute: 
+  freeze: auto
+  cache: true
+  warning: false
+---
+
+```{r}
+library(tidyverse)
+library(readxl)
+
+survey <- read_excel("dados-diversos.xlsx",
+                     "survey")
+survey |> 
+  count(year)
+
+q <- table(survey$residue, survey$inc_class)
+chisq.test(q)
+fisher.test(q)
+
+
+library(janitor)
+survey |>
+  tabyl(year, species)
+  
+  
+survey |> 
+  filter(residue != "NA") |> 
+  count(residue, inc_class) |> 
+  ggplot(aes(residue, n, fill = inc_class))+
+  geom_col()
+
+
+curve <- read_excel("dados-diversos.xlsx",
+                     "curve")
+
+curve2 <- curve |> 
+  group_by(Irrigation, day) |> 
+  summarize(mean_severity = mean(severity),
+            sd_severity = sd(severity))
+
+curve2 |> 
+  ggplot(aes(day, mean_severity, color = Irrigation))+
+  geom_point()+
+  geom_errorbar(aes(ymin = mean_severity - sd_severity, ymax = mean_severity + sd_severity), width = 0.1)+
+  geom_line()
+
+library(epifitter)
+ 
+curve3 <- curve |> 
+  group_by(Irrigation, rep) |> 
+  summarise(audpc = AUDPC(day, severity,
+                          y_proportion = F)) |> 
+  pivot_wider(1, names_from = Irrigation,
+              values_from = audpc)
+
+t.test(curve3$Drip, curve3$Furrow)
+```
+
+```{r}
+library(gsheet)
+tw <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1t5xftb0xSRPNFhM7h_MiPNtwt2UFUcm9/edit#gid=1594889893")
+
+tw |> 
+  group_by(cult, silicio, hai) |> 
+  summarise(mean_lesion = mean(lesion_size),
+            sd_lesion = sd(lesion_size)) |> 
+  ggplot(aes(hai, mean_lesion, color = silicio))+
+  geom_line()+
+  geom_point()+
+  geom_errorbar(aes(ymin = mean_lesion - sd_lesion, 
+                    ymax = mean_lesion + sd_lesion),
+                width = 0.1)+
+  facet_wrap(~cult)
+```
+
+```{r}
+library(agricolae)
+tw2 <- tw |> 
+  group_by(exp, cult, silicio, rep) |> 
+  summarise(audpc = audpc(hai, lesion_size)) |> 
+  filter(audpc > 0)
+
+tw2 |> 
+  ggplot(aes(cult, audpc, color = silicio))+
+  geom_boxplot()+
+  facet_wrap(~ exp)
+```
+
+```{r}
+aov1 <- aov(sqrt(audpc) ~ cult*silicio, data = tw2)
+summary(aov1)
+library(performance)
+check_normality(aov1)
+check_heteroscedasticity(aov1)
+library(emmeans)
+
+m1 <- emmeans(aov1, ~ cult | silicio, type = "response" )
+m1
+```

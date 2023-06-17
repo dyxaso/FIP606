@@ -1,0 +1,69 @@
+---
+title: "Gráficos em ggplot part.4"
+author: "Yuri combinação com aula do Prof"
+format: html
+
+execute: 
+  freeze: auto
+  cache: true
+  warning: false
+---
+
+```{r}
+library(tidyverse)
+library(readxl)
+
+mofo <- read_excel("dados-diversos.xlsx", "mofo")
+```
+
+## Gráfico de Colunas:
+
+```{r}
+mofo |> 
+  ggplot(aes(treat, yld))+
+  geom_col()+
+  facet_wrap(~study)
+```
+
+## Histograma e boxplot :
+
+```{r}
+h <- mofo |> 
+  ggplot(aes(scl))+
+  geom_histogram(bins = 10)
+
+b <- mofo |> 
+  ggplot(aes(scl))+
+  geom_boxplot()
+```
+
+```{r}
+library(patchwork)
+h / b
+```
+
+```{r}
+mofo2 <- mofo
+```
+
+```{r}
+h2 <- mofo2 |> 
+  ggplot(aes(yld))+
+  geom_histogram(bins = 10)
+h2
+
+h / h2
+```
+
+```{r}
+survey <- read_excel("dados-diversos.xlsx", "survey")
+
+survey |> 
+  filter(state == "RS") |> 
+  count(species, residue) |> 
+  arrange(n) |> 
+  rename(res = residue) |> 
+  mutate(n_class = case_when(
+          n < 30 ~ "baixa",
+          TRUE ~ "Alta"))
+```

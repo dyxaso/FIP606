@@ -1,0 +1,74 @@
+---
+title: "Regressão"
+author: "Yuri"
+format: html
+
+execute: 
+  freeze: auto
+  cache: true
+  warning: false
+---
+
+## Análise de regressão
+
+```{r}
+library(tidyverse)
+library(readxl)
+
+estande <- read_excel("dados-diversos.xlsx", "estande")
+
+estande |> 
+  ggplot(aes(trat, nplants))+
+  geom_point()+
+  facet_wrap(~exp)+
+  ylim(0, max(estande$nplants))+
+  geom_smooth(se =  FALSE, method = "lm")
+```
+
+Uma regressão para cada experimento:
+
+```{r}
+exp1 <- estande |> 
+  filter(exp==1)
+m1 <- lm(nplants ~trat, data = exp1)
+summary(m1)
+
+exp2 <- estande |> 
+  filter(exp==2)
+m2 <- lm(nplants ~trat, data = exp2)
+summary(m2)
+
+exp3 <- estande |> 
+  filter(exp==3)
+m3 <- lm(nplants ~trat, data = exp3)
+summary(m3)
+
+library(report)
+report(m1)
+
+g2 <- exp1 |> 
+  ggplot(aes(trat, nplants))+
+  geom_point()+
+  geom_smooth(method = "lm", se = F)+
+    annotate(geom ="text", x = 24,
+             y=70, label = "y = 52.5 - 0.24x")
+
+(52.5+60+95+69)/4
+```
+
+Modelo linear generalizado:
+
+```{r}
+
+glm1 <- glm(nplants ~ trat, family= "gaussian",
+            data = exp3)
+
+glm2 <- glm(nplants ~ trat, family= poisson(link = "log"),
+            data = exp3)
+summary(glm1)
+
+summary(glm2)
+
+AIC(glm1)
+AIC(glm2)
+```
