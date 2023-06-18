@@ -1,5 +1,4 @@
 [2,"\n"]
-[1,"Terminating existing preview server....DONE\n\n"]
 [1,"Rendering:\n"]
 [1,"\r[ 1/18] about.qmd\n"]
 [1,"\r[ 2/18] Ar\\aula10.qmd\n"]
@@ -20,5 +19,5 @@
 [1,"\r[17/18] Ar\\aula9.qmd\n"]
 [1,"\r[18/18] index.qmd\n"]
 [1,"\n"]
-[1,"Watching files for changes\nBrowse at http://localhost:7949/\n"]
+[1,"Watching files for changes\nBrowse at http://localhost:6616/\n"]
 [1,"GET: /\n"]
