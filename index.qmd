@@ -2,7 +2,7 @@
 title: "Yuri Xavier"
 about:
   template: solana
-  image: yuri.jpg.jpg 
+  image: yuri.png
 ---
 
 ![](images/top.gif){fig-align="center" width="63%"}

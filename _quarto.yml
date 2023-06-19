@@ -7,7 +7,11 @@ execute:
 
 website:
   title: "FIP606"
+  favicon: dnaa.png
   navbar:
+    pinned: true
+    logo: dnaa.png
+  
     right: 
       - icon: linkedin
         href: https://www.linkedin.com/in/dyxaso/
@@ -66,8 +70,11 @@ website:
      
 format:
   html:
-    theme: solar
+    theme: 
+      light: default
+      dark: solar
     css: styles.css
+
     toc: true
 editor: visual
 
