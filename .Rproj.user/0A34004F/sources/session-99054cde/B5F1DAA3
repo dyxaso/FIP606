@@ -1,12 +1,12 @@
 {
-    "id": "3FD07427",
+    "id": "B5F1DAA3",
     "path": "C:/Users/LG/Desktop/FIP606/index.qmd",
     "project_path": "index.qmd",
     "type": "quarto_markdown",
-    "hash": "2769521779",
+    "hash": "0",
     "contents": "",
     "dirty": false,
-    "created": 1687056978547.0,
+    "created": 1687179060912.0,
     "source_on_save": false,
     "relative_order": 2,
     "properties": {
@@ -16,8 +16,8 @@
         "Source": "Source",
         "docOutlineVisible": "1",
         "rmdVisualCollapsedChunks": "",
-        "rmdVisualModeLocation": "574:602",
-        "cursorPosition": "17,0",
+        "rmdVisualModeLocation": "2:0",
+        "cursorPosition": "0,0",
         "scrollLine": "0",
         "docOutlineSize": "7"
     },
@@ -26,7 +26,7 @@
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1687057010280,
+    "last_content_update": 1687057010,
     "read_only": false,
     "read_only_alternatives": []
 }

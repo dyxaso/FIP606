@@ -1,0 +1,71 @@
+---
+title: "Transformação BOX COX"
+author: "Yuri"
+---
+
+"Dados utilizados: aula10.qmd"
+
+Transformação de Dados Box Cox (BC)
+
+¹ Na análise de variância, pressupomos que os dados sejam homocedasticos (Os tratamentos apresentam a mesma variabilidade).
+
+² Quando a pressuposição do texto ¹ não é atendida, necessitamos transformar os dados.
+
+³ O BC é um recurso matemático que utilizamos para validade o modelo de ANOVA.
+
+B.C (Desenvolvimento)
+
+George Box e David Cox, estatísticos renomados, conceberam um método revolucionário para encontrar o expoente perfeito (Lambda = 1) a fim de moldar os dados em uma distribuição "normalizada". Quando Lambda assume o valor de 1, nenhuma alteração é necessária, uma vez que os resultados são idênticos aos originais. Essencialmente, o valor de Lambda indica a potência à qual todos os dados devem ser elevados. Para alcançar isso, a técnica de transformação de potência Box-Cox explora uma faixa de valores de Lambda de -5 a +5, em busca do valor ideal. Apresentamos abaixo uma tabela com algumas transformações Box-Cox comumente utilizadas, onde Y' representa a transformação dos dados originais Y. É importante notar que, para Lambda igual a 0, a transformação NÃO é Y^0 (pois isso resultaria em 1 para cada valor), mas sim o logaritmo de Y.
+
+No pacote MASS, é possível encontrar a função boxcox, que desempenha um papel importante na transformação da variável resposta. Essa transformação é realizada por meio da fórmula "variável resposta ^ lambda - 1", em que lambda (λ) é o valor utilizado.
+
+```{r}
+library(readxl)
+library(tidyverse)
+micelial <- read_excel("dados-diversos.xlsx", "fungicida_vaso")
+micelial <- micelial |> 
+  mutate(inc = inf_seeds/n_seeds*100,
+         rank_inc = rank(inc))
+rank_anova <- aov(rank_inc ~ treat*dose, data = micelial)
+summary(rank_anova)
+```
+
+```{r}
+library(emmeans)
+means_rank <- emmeans(rank_anova, ~ treat | dose)
+library(multcomp)
+library(multcompView)
+cld(means_rank)
+```
+
+```{r}
+library(MASS)
+
+insects <- tibble::as_tibble(InsectSprays)|> 
+  dplyr::select(spray, count)
+insects
+```
+
+```{r}
+b <- boxcox(lm(insects$count+0.1 ~ 1)) # o valor 
+```
+
+```{r}
+lambda <- b$x[which.max(b$y)]
+lambda
+```
+
+```{r}
+insects$count2 <- (insects$count ^ lambda - 1) / lambda 
+insects$count2 
+```
+
+```{r}
+hist(insects$count)
+```
+
+```{r}
+hist(insects$count2)
+```
+
+
