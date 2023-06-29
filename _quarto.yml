@@ -6,12 +6,9 @@ execute:
   freeze: auto
 
 website:
-  title: "FIP606"
-  favicon: dnaa.png
-  navbar:
-    pinned: true
-    logo: dnaa.png
+  title: "FIP-606"
   
+  navbar:
     right: 
       - icon: linkedin
         href: https://www.linkedin.com/in/dyxaso/
@@ -22,50 +19,10 @@ website:
       - icon: send
         href: mailto:daniel.y.sousa@ufv.br
     left:
-      - text: Básico do R
+      - text: Conjunto de Dados
         menu: 
-          - href: Ar/aula2.qmd
-            text: Carregamento de Pacotes
-          - href: Ar/aula3.qmd
-            text: Dataframe
-      - text: Gráficos em R   
-        menu:
-          - href: Ar/aula4.qmd
-            text: "Gráficos 1"
-          - href: Ar/aula5.qmd
-            text: "Gráficos 2"
-          - href: Ar/aula6.qmd
-            text: "Gráficos 3"
-          - href: Ar/aula7.qmd
-            text: "Gráficos 4"
-      - text: Estatística em R
-        menu:
-          - href: Ar/aula8.qmd
-            text: Teste T (Iniciando)
-          - href: Ar/aula9.qmd
-            text: Teste T (Dependente e Pareado)
-          - href: Ar/aula10.qmd
-            text: ANOVA1 Fator
-          - href: Ar/aula11.qmd
-            text: ANOVA2 Fatores
-          - href: Ar/aula12.qmd
-            text: Blocos e Parcelas S.Divididas 
-          - href: Ar/aula13.qmd
-            text: Análise de Regressão
-          - href: Ar/aula14.qmd
-            text: Análises de Correlação
-          - href: Ar/aula15.qmd
-            text: Tabela de Contigência / Variáveis Categóricas
-          - href: Ar/aula18.qmd
-            text: Transformação (Box Cox)
-      - text: MAPAS
-        menu:
-          - href: Ar/aula16.qmd
-            text: Mapas em R
-      - text: EC50
-        menu: 
-          - href: Ar/aula17.qmd
-            text: EC50 Metodologia 
+          - href: agata.qmd
+            text: Exploração & Estatística
         
      
 format:
